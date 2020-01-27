@@ -50,21 +50,22 @@ export default {
     };
   },
   methods: {
-    registerHandler() {
-      const userData = {
+    async registerHandler() {
+      try {
+        await this.$store.dispatch("register", this.getUserData());
+        this.$router.push({ name: "login" });
+      } catch (error) {
+        this.error.title = "Register Error";
+        this.error.message = error.message;
+      }
+    },
+    getUserData() {
+      return {
         name: this.name,
         email: this.email,
         password: this.password,
         password_confirmation: this.confirmPassword
       };
-      this.$store.dispatch("register", userData)
-      .then(() => {
-        this.$router.push({ name: "login" });
-      })
-      .catch(error => {
-        this.error.title = "Register Error";
-        this.error.message = error.message;
-      });
     }
   }
 };
