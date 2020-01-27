@@ -5,8 +5,8 @@
         <h1>Register</h1>
       </v-card-title>
       <v-card-text>
-        <v-form @submit.prevent="register">
-          <v-text-field label='Name' v-model="name" prepend-icon="mdi-account-circle"/>
+        <v-form @submit.prevent="registerHandler">
+          <v-text-field label="Name" v-model="name" prepend-icon="mdi-account-circle" />
           <v-text-field label="E-mail" v-model="email" prepend-icon="mdi-mail" />
           <v-text-field
             type="Password"
@@ -22,14 +22,14 @@
             prepend-icon="mdi-lock"
             append-icon="mdi-eye-off"
           />
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-btn color="success" type="submit">Register</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn color="info">Login</v-btn>
+          </v-card-actions>
         </v-form>
       </v-card-text>
-      <v-divider></v-divider>
-      <v-card-actions>
-        <v-btn color="success">Register</v-btn>
-        <v-spacer></v-spacer>
-        <v-btn color="info" type="submit">Login</v-btn>
-      </v-card-actions>
     </v-card>
   </v-app>
 </template>
@@ -50,8 +50,21 @@ export default {
     };
   },
   methods: {
-    register() {
-      
+    registerHandler() {
+      const userData = {
+        name: this.name,
+        email: this.email,
+        password: this.password,
+        password_confirmation: this.confirmPassword
+      };
+      this.$store.dispatch("register", userData)
+      .then(() => {
+        this.$router.push({ name: "login" });
+      })
+      .catch(error => {
+        this.error.title = "Register Error";
+        this.error.message = error.message;
+      });
     }
   }
 };
