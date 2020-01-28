@@ -1,6 +1,7 @@
 <template>
   <v-app>
     Home
+    <a href="/movies">See all movies</a>
   </v-app>
 </template>
 
