@@ -7,7 +7,7 @@
       <v-card-text>
         <ValidationObserver>
           <v-form @submit.prevent="registerHandler">
-            <ValidationProvider rules="required|max:255" v-slot="{ errors, valid }">
+            <ValidationProvider rules="required|max:255|min:2" v-slot="{ errors, valid }">
               <v-text-field
                 label="Name"
                 v-model="name"
@@ -26,7 +26,7 @@
                 prepend-icon="mdi-mail"
               />
             </ValidationProvider>
-            <ValidationProvider rules="required|min:6" v-slot="{ errors, valid }">
+            <ValidationProvider rules="required|min:6" v-slot="{ errors, valid }" vid="password">
               <v-text-field
                 type="Password"
                 label="Password"
@@ -37,7 +37,7 @@
                 append-icon="mdi-eye-off"
               />
             </ValidationProvider>
-            <ValidationProvider rules="required|min:6" v-slot="{ errors, valid }">
+            <ValidationProvider rules="required|confirmed:password|min:6" v-slot="{ errors, valid }" data-vv-as="password">
               <v-text-field
                 type="Password"
                 label="Confirm Password"

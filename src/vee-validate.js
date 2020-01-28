@@ -1,5 +1,5 @@
 import { extend } from 'vee-validate';
-import { required, email, max, min } from "vee-validate/dist/rules";
+import { required, email, max, min, confirmed } from "vee-validate/dist/rules";
 
 extend("required", {
   ...required,
@@ -20,3 +20,8 @@ extend('min', {
   ...min,
   message: 'This field must be {length} characters or more'
 });
+
+extend('confirmed', {
+  ...confirmed,
+  message: 'Passwords do not match'
+})
