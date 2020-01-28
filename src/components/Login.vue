@@ -62,7 +62,6 @@ export default {
       try {
         await this.$store.dispatch("login", this.getUserData());
         this.$router.push({ name: "home" });
-        console.log("login ok");
       } catch (error) {
         this.error.message = error.message;
       }
