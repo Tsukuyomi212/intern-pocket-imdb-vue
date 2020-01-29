@@ -10,7 +10,7 @@ export default {
     user(state) {
       return state.user;
     },
-    token(state) {
+    isLoggedIn(state) {
       return state.token.length > 0;
     }
   },

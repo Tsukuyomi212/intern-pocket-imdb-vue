@@ -27,7 +27,7 @@ export default {
     };
   },
   created() {
-    if (this.$store.getters['user/token']) {
+    if (this.$store.getters['user/isLoggedIn']) {
       this.fetchMovies();
     } else {
       this.error = 'No movies for you! :p';
