@@ -1,7 +1,7 @@
 <template>
   <v-app>
     Home
-    <a href="/movies">See all movies</a>
+    <router-link to='/movies'>See all movies</router-link>
   </v-app>
 </template>
 

@@ -1,17 +1,17 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
 import { userService } from '../services/user-service';
 
-Vue.use(Vuex);
-
-export const store = new Vuex.Store({
+export default {
+  namespaced: true,
   state: {
     token: localStorage.getItem('token') || '',
     user: {}
   },
   getters: {
-    getUser(state) {
+    user(state) {
       return state.user;
+    },
+    token(state) {
+      return state.token.length > 0;
     }
   },
   mutations: {
@@ -27,9 +27,9 @@ export const store = new Vuex.Store({
       const user = await userService.register(userData);
       commit('registerUser', user);
     },
-    async login({commit}, userData) {
+    async login({ commit }, userData) {
       const user = await userService.login(userData);
       commit('loginUser', user);
     }
   }
-});
+};

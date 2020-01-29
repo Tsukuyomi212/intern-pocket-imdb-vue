@@ -6,7 +6,7 @@ import vuetify from './plugins/vuetify';
 import App from './App.vue'
 import axios from './vue-axios';
 import Routes from './routes';
-import { store } from './store/store';
+import store  from './store/index';
 import "./vee-validate";
 
 Vue.config.productionTip = false

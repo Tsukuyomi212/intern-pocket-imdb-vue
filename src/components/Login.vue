@@ -60,7 +60,7 @@ export default {
   methods: {
     async loginHandler() {
       try {
-        await this.$store.dispatch("login", this.getUserData());
+        await this.$store.dispatch("user/login", this.getUserData());
         this.$router.push({ name: "home" });
       } catch (error) {
         this.error.message = error.message;
