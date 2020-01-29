@@ -3,22 +3,58 @@ import { movieService } from '../services/movie-service';
 export default {
   namespaced: true,
   state: {
-    movies: []
+    movies: [],
+    pagination: {}
   },
   getters: {
     movies(state) {
       return state.movies;
+    },
+    pagination(state) {
+      return state.pagination;
     }
   },
   mutations: {
     setMovies(state, movies) {
       state.movies = movies;
+    },
+    setPagination(state, pagination) {
+      state.pagination = pagination;
     }
   },
   actions: {
-    async fetchMovies({ commit }) {
-      const movies = await movieService.getMovies();
+    async fetchMovies({ commit }, url) {
+      const response = await movieService.getMovies(url);
+      const movies = response.data;
+      const pagination = {
+        currentPage: response.current_page,
+        lastPage: response.last_page,
+        firstPageUrl: response.first_page_url,
+        nextPageUrl: response.next_page_url,
+        lastPageUrl: response.last_page_url,
+        perPage: response.per_page,
+        previousPageUrl: response.prev_page_url,
+        from: response.from,
+        to: response.to,
+        total: response.total
+      };
+      commit('setPagination', pagination);
       commit('setMovies', movies);
-    }
+    },
+    fetchInitial({dispatch}) {
+      dispatch('fetchMovies', undefined);
+    },
+    fetchNextPage({dispatch, state}) {
+      dispatch('fetchMovies', state.pagination.nextPageUrl);
+    },
+    fetchLastPage({dispatch, state}) {
+      dispatch('fetchMovies', state.pagination.lastPageUrl);
+    },
+    fetchPreviousPage({dispatch, state}) {
+      dispatch('fetchMovies', state.pagination.previousPageUrl);
+    },
+    fetchFirstPage({dispatch, state}) {
+      dispatch('fetchMovies', state.pagination.firstPageUrl);
+    },
   }
 };

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
-const getMovies = () => {
-  return Vue.axios.get('/movies')
+const getMovies = (url = '/movies') => {
+  return Vue.axios.get(url)
     .then(result => {
       return result.data;
     }).catch((error) => {
