@@ -1,7 +1,6 @@
 import Register from './components/Register';
 import Login from './components/Login';
 import Movies from './components/Movies';
-import Home from './components/Home';
 import store  from './store/index';
 
 export default [
@@ -12,6 +11,5 @@ export default [
       next('/login');
     }
     next();
-  }},
-  {name: 'home', path: '/', component: Home}
+  }}
 ];

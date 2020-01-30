@@ -23,9 +23,6 @@
     </table>
     
     <br />
-    <div class="centered-text">
-      <router-link to="/">Back to Home</router-link>
-    </div>
   </div>
 </template>
 
