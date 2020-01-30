@@ -32,30 +32,32 @@
 <script>
 export default {
   name: "Movies",
+  data() {
+    return {
+      error: null
+    };
+  },
   computed: {
     movies() {
       return this.$store.getters["movies/movies"];
     },
     pagination() {
       return this.$store.getters["movies/pagination"];
+    },
+    authenticated() {
+      return this.$store.getters["user/isLoggedIn"];
     }
-  },
-
-  data() {
-    return {
-      error: null
-    };
   },
   created() {
-    if (this.$store.getters["user/isLoggedIn"]) {
       this.fetchMovies();
-    } else {
-      this.error = "No movies for you! :p";
-    }
   },
   methods: {
     async fetchMovies() {
-      return await this.$store.dispatch("movies/fetchInitial");
+      try {
+        return await this.$store.dispatch("movies/fetchInitial");
+      } catch (error) {
+      this.error = error.message;
+    }
     },
    fetchNextPage() {
       return this.$store.dispatch('movies/fetchNextPage');
