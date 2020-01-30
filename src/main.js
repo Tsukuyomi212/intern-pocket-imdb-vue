@@ -16,7 +16,7 @@ Vue.use(Vuetify);
 export const router = new VueRouter({
   mode: 'history',
   routes: Routes
-})
+});
 
 new Vue({
   vuetify,

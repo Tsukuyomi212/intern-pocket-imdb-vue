@@ -31,6 +31,8 @@ const login = ({email, password}) => {
       return;
     }
     localStorage.token = req.data.token;
+
+    return req.data
   })
   .catch((e) => {
     localStorage.removeItem('token');

@@ -57,11 +57,21 @@ export default {
       }
     };
   },
+  computed: {
+    authenticated() {
+      return this.$store.getters["user/isLoggedIn"];
+    }
+  },
+  created() {
+    if (this.authenticated) {
+      this.$router.push({ name: "movies" });
+    }
+  },
   methods: {
     async loginHandler() {
       try {
         await this.$store.dispatch("user/login", this.getUserData());
-        this.$router.push({ name: "home" });
+        this.$router.push({ name: "movies" });
       } catch (error) {
         this.error.message = error.message;
       }
