@@ -57,6 +57,16 @@ export default {
       }
     };
   },
+  computed: {
+    authenticated() {
+      return this.$store.getters["user/isLoggedIn"];
+    }
+  },
+  created() {
+    if (this.authenticated) {
+      this.$router.push({ name: "home" });
+    }
+  },
   methods: {
     async loginHandler() {
       try {
