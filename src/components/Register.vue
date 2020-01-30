@@ -84,7 +84,7 @@ export default {
   methods: {
     async registerHandler() {
       try {
-        await this.$store.dispatch("register", this.getUserData());
+        await this.$store.dispatch("user/register", this.getUserData());
         this.$router.push({ name: "login" });
       } catch (error) {
         this.error.title = "Register Error";
