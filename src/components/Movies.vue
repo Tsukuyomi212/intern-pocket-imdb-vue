@@ -4,11 +4,17 @@
     <div v-if="error">{{error}}</div>
     <br />
     <div class="centered-text">
-      <button v-on:click="fetchFirstPage" :disabled='pagination.currentPage == 1'>| first |</button>
-      <button v-on:click="fetchPreviousPage" :disabled='pagination.currentPage == 1'>| previous |</button>
+      <button v-on:click="fetchFirstPage" :disabled="pagination.currentPage == 1">| first |</button>
+      <button v-on:click="fetchPreviousPage" :disabled="pagination.currentPage == 1">| previous |</button>
       <span>| {{pagination.currentPage}} |</span>
-      <button v-on:click="fetchNextPage" :disabled='pagination.currentPage == pagination.lastPage'>| next |</button>
-      <button v-on:click="fetchLastPage" :disabled='pagination.currentPage == pagination.lastPage'>| last |</button>
+      <button
+        v-on:click="fetchNextPage"
+        :disabled="pagination.currentPage == pagination.lastPage"
+      >| next |</button>
+      <button
+        v-on:click="fetchLastPage"
+        :disabled="pagination.currentPage == pagination.lastPage"
+      >| last |</button>
     </div>
     <br />
     <table>
@@ -18,10 +24,11 @@
       </tr>
       <tr :key="movie.id" v-for="movie in movies">
         <td class="centered-text">{{movie.id}}</td>
-        <td class="movie-title">{{movie.title}}</td>
+        <td class="movie-title">
+          <router-link :to="{name: 'movie', params: {id: movie.id}}">{{movie.title}}</router-link>
+        </td>
       </tr>
     </table>
-    
     <br />
   </div>
 </template>
@@ -46,53 +53,55 @@ export default {
     }
   },
   created() {
-      this.fetchMovies();
+    this.fetchMovies();
   },
   methods: {
     async fetchMovies() {
       try {
         return await this.$store.dispatch("movies/fetchInitial");
       } catch (error) {
-      this.error = error.message;
-    }
+        this.error = error.message;
+      }
     },
-   fetchNextPage() {
-      return this.$store.dispatch('movies/fetchNextPage');
+    fetchNextPage() {
+      return this.$store.dispatch("movies/fetchNextPage");
     },
     fetchLastPage() {
-      return this.$store.dispatch('movies/fetchLastPage');
+      return this.$store.dispatch("movies/fetchLastPage");
     },
     fetchPreviousPage() {
-      return this.$store.dispatch('movies/fetchPreviousPage');
+      return this.$store.dispatch("movies/fetchPreviousPage");
     },
     fetchFirstPage() {
-      return this.$store.dispatch('movies/fetchFirstPage');
+      return this.$store.dispatch("movies/fetchFirstPage");
     }
   }
 };
 </script>
 <style scoped>
-  table, th, td {
+table,
+th,
+td {
   border: 1px solid black;
-  }
-  table {
-    width: 100%
-  }
-  .centered-text {
-    text-align: center;
-  }
-  .movie-title {
-    padding-left: 5px;
-  }
-  button {
-    color: green;
-  }
-  button:hover {
-    color: white;
-    background-color: green
-  }
-  button:disabled {
-    color: grey;
-    background-color: white;
-  }
+}
+table {
+  width: 100%;
+}
+.centered-text {
+  text-align: center;
+}
+.movie-title {
+  padding-left: 5px;
+}
+button {
+  color: green;
+}
+button:hover {
+  color: white;
+  background-color: green;
+}
+button:disabled {
+  color: grey;
+  background-color: white;
+}
 </style>

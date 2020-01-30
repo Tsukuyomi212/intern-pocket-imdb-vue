@@ -6,7 +6,8 @@ export default {
   namespaced: true,
   state: {
     movies: [],
-    pagination: {}
+    pagination: {},
+    movie: {}
   },
   getters: {
     movies(state) {
@@ -14,6 +15,9 @@ export default {
     },
     pagination(state) {
       return state.pagination;
+    },
+    movie(state) {
+      return state.movie;
     }
   },
   mutations: {
@@ -22,6 +26,9 @@ export default {
     },
     setPagination(state, pagination) {
       state.pagination = pagination;
+    },
+    setMovie(state, movie) {
+      state.movie = movie;
     }
   },
   actions: {
@@ -42,6 +49,7 @@ export default {
         to: response.to,
         total: response.total
       };
+      console.log(movies);
       commit('setPagination', pagination);
       commit('setMovies', movies);
     },
@@ -59,6 +67,10 @@ export default {
     },
     fetchFirstPage({dispatch, state}) {
       dispatch('fetchMovies', state.pagination.firstPageUrl);
+    },
+    async fetchMovie({commit}, id) {
+      const movie = await movieService.getMovie(id);
+      commit('setMovie', movie);
     }
   }
 };
