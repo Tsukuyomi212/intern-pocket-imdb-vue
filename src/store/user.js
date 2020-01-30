@@ -1,5 +1,7 @@
 import { userService } from '../services/user-service';
 
+import _isEmpty from 'lodash/isEmpty';
+
 export default {
   namespaced: true,
   state: {
@@ -11,7 +13,7 @@ export default {
       return state.user;
     },
     isLoggedIn(state) {
-      return state.token.length > 0;
+      return !_isEmpty(state.user)
     }
   },
   mutations: {
@@ -20,6 +22,9 @@ export default {
     },
     loginUser(state, user) {
       state.user = user;
+    },
+    logoutUser(state) {
+      state.user = {};
     }
   },
   actions: {
@@ -30,6 +35,10 @@ export default {
     async login({ commit }, userData) {
       const user = await userService.login(userData);
       commit('loginUser', user);
+    },
+    async logout({commit}) {
+      await userService.logout();
+      commit('logoutUser');
     }
   }
 };
