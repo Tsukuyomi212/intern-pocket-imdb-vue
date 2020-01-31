@@ -42,6 +42,7 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from "vee-validate";
+
 export default {
   name: "Login",
   components: {
@@ -71,6 +72,7 @@ export default {
     async loginHandler() {
       try {
         await this.$store.dispatch("user/login", this.getUserData());
+        this.$store.commit('user/updateUserToken', localStorage.getItem('token'))
         this.$router.push({ name: "movies" });
       } catch (error) {
         this.error.message = error.message;
