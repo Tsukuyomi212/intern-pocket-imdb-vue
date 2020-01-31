@@ -1,18 +1,21 @@
 <template>
-  <div>
+  <div class="centered-text">
+    <div class="movie-title">{{movie.title}}</div>
+    <div class="image">
+      <img :src="movie.image_url" alt="movie poster" />
+    </div>
+    <div class="movie-description">{{movie.description}}</div>
+    <br />
     <router-link :to="{name: 'movies'}">Back to movies</router-link>
-    <div>{{movie.title}}</div>
-    <div>{{movie.description}}</div>
-    <div><img :src='movie.image_url' /></div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Movie',
+  name: "Movie",
   computed: {
     movie() {
-      return this.$store.getters['movies/movie'];
+      return this.$store.getters["movies/movie"];
     }
   },
   created() {
@@ -20,8 +23,43 @@ export default {
   },
   methods: {
     async fetchMovie() {
-      await this.$store.dispatch('movies/fetchMovie', this.$route.params.id);
+      await this.$store.dispatch("movies/fetchMovie", this.$route.params.id);
     }
   }
-}
+};
 </script>
+<style scoped>
+a {
+  text-decoration: none;
+  color: grey;
+}
+a:visited {
+  color: grey;
+}
+a:hover {
+  color: black;
+}
+.centered-text {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.movie-title {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 2em;
+  text-transform: uppercase;
+}
+.movie-description {
+  font-size: 1.2em;
+  margin-bottom: 30px;
+}
+.image {
+  margin: 10px 0;
+}
+img {
+  max-height: 250px
+}
+</style>

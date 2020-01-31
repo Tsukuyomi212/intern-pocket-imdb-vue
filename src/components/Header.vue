@@ -3,7 +3,9 @@
     <nav>
       <v-toolbar>
         <v-toolbar-title class="text-uppercase grey--text">
-          <span>IMDB</span>
+          <span>
+            <router-link :to="{name: 'movies'}">IMDB</router-link>
+          </span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn text color="grey" @click="emitLogout" v-if="authenticated">
@@ -20,13 +22,25 @@ export default {
   name: "Header",
   computed: {
     authenticated() {
-      return this.$store.getters['user/isLoggedIn'];
+      return this.$store.getters["user/isLoggedIn"];
     }
   },
   methods: {
     emitLogout() {
-      this.$emit('logout');
+      this.$emit("logout");
     }
   }
 };
 </script>
+<style scoped>
+a {
+  text-decoration: none;
+  color: black;
+}
+a:visited {
+  color: black;
+}
+a:hover {
+  text-shadow: 1px 1px grey;
+}
+</style>
