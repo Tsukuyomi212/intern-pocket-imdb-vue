@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1>Movie page</h1>
-    <div>{{this.movie.title}}</div>
-    <div>{{this.movie.description}}</div>
-    <div><img :src='this.movie.image_url' /></div>
+    <router-link :to="{name: 'movies'}">Back to movies</router-link>
+    <div>{{movie.title}}</div>
+    <div>{{movie.description}}</div>
+    <div><img :src='movie.image_url' /></div>
   </div>
 </template>
 
