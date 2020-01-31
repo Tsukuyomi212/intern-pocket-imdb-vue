@@ -49,7 +49,6 @@ export default {
         to: response.to,
         total: response.total
       };
-      console.log(movies);
       commit('setPagination', pagination);
       commit('setMovies', movies);
     },
