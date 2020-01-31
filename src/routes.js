@@ -1,6 +1,7 @@
 import Register from './components/Register';
 import Login from './components/Login';
 import Movies from './components/Movies';
+import Movie from './components/Movie'
 import store  from './store/index';
 
 export default [
@@ -11,5 +12,6 @@ export default [
       next('/login');
     }
     next();
-  }}
+  }},
+  {name: 'movie', path: '/movies/:id', component: Movie},
 ];

@@ -9,6 +9,16 @@ const getMovies = (url = '/movies') => {
     });
 }
 
+const getMovie = (id) => {
+  return Vue.axios.get('/movies/' + id)
+    .then(result => {
+      return result.data;
+    }).catch(error => {
+      throw error;
+    })
+}
+
 export const movieService = {
-  getMovies
+  getMovies,
+  getMovie
 };

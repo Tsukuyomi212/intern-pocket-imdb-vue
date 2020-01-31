@@ -1,19 +1,17 @@
 import { userService } from '../services/user-service';
 
-import _isEmpty from 'lodash/isEmpty';
-
 export default {
   namespaced: true,
   state: {
     token: localStorage.getItem('token') || '',
-    user: {}
+    user: null
   },
   getters: {
     user(state) {
       return state.user;
     },
     isLoggedIn(state) {
-      return !_isEmpty(state.user)
+      return !!state.token
     }
   },
   mutations: {
@@ -22,9 +20,14 @@ export default {
     },
     loginUser(state, user) {
       state.user = user;
+      state.token = user.token
     },
     logoutUser(state) {
       state.user = {};
+      state.token = ''
+    },
+    updateUserToken(state, token) {
+      state.token = token
     }
   },
   actions: {
