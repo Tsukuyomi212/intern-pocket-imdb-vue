@@ -1,7 +1,5 @@
 import { movieService } from '../services/movie-service';
 
-// import _isEmpty from 'lodash/isEmpty'
-
 export default {
   namespaced: true,
   state: {
@@ -33,7 +31,6 @@ export default {
   },
   actions: {
     async fetchMovies({ commit }, url) {
-      // if (!_isEmpty(state.movies)) return
 
       const response = await movieService.getMovies(url);
       const movies = response.data;

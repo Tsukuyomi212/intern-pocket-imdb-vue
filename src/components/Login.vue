@@ -65,11 +65,6 @@ export default {
       return this.$store.getters["user/isLoggedIn"];
     }
   },
-  // created() {
-  //   if (this.authenticated) {
-  //     this.$router.push({ name: "movies" });
-  //   }
-  // },
   methods: {
     async loginHandler() {
       try {
