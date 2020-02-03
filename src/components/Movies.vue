@@ -1,35 +1,42 @@
 <template>
-  <div>
-    <h1 class="centered-text">Movies</h1>
+  <div class="center-content">
+    <h1 class="centered-text title">Movie Catalogue</h1>
     <div v-if="error">{{error}}</div>
     <br />
+    <v-simple-table>
+      <template v-slot:default>
+        <thead>
+          <tr>
+            <th class="text-left">#</th>
+            <th class="text-left">Movie Title</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="movie in movies" :key="movie.id">
+            <td class="id-col centered-text">{{ movie.id }}</td>
+            <td class="title-col">
+              <router-link :to="{name: 'movie', params: {id: movie.id}}">{{movie.title}}</router-link>
+            </td>
+          </tr>
+        </tbody>
+      </template>
+    </v-simple-table>
+    <br />
     <div class="centered-text">
-      <button v-on:click="fetchFirstPage" :disabled="pagination.currentPage == 1">| first |</button>
-      <button v-on:click="fetchPreviousPage" :disabled="pagination.currentPage == 1">| previous |</button>
-      <span>| {{pagination.currentPage}} |</span>
-      <button
-        v-on:click="fetchNextPage"
-        :disabled="pagination.currentPage == pagination.lastPage"
-      >| next |</button>
-      <button
-        v-on:click="fetchLastPage"
-        :disabled="pagination.currentPage == pagination.lastPage"
-      >| last |</button>
+      <v-btn @click="fetchFirstPage" :disabled="pagination.currentPage == 1">
+        <i class="fas fa-angle-double-left"></i>
+      </v-btn>
+      <v-btn @click="fetchPreviousPage" :disabled="pagination.currentPage == 1">
+        <i class="fas fa-angle-left"></i>
+      </v-btn>
+      <span class="page-num">{{pagination.currentPage}}</span>
+      <v-btn @click="fetchNextPage" :disabled="pagination.currentPage == pagination.lastPage">
+        <i class="fas fa-angle-right"></i>
+      </v-btn>
+      <v-btn @click="fetchLastPage" :disabled="pagination.currentPage == pagination.lastPage">
+        <i class="fas fa-angle-double-right"></i>
+      </v-btn>
     </div>
-    <br />
-    <table>
-      <tr class="centered-text">
-        <th>#</th>
-        <th>Movie Title</th>
-      </tr>
-      <tr :key="movie.id" v-for="movie in movies">
-        <td class="centered-text">{{movie.id}}</td>
-        <td class="movie-title">
-          <router-link :to="{name: 'movie', params: {id: movie.id}}">{{movie.title}}</router-link>
-        </td>
-      </tr>
-    </table>
-    <br />
   </div>
 </template>
 
@@ -38,6 +45,18 @@ export default {
   name: "Movies",
   data() {
     return {
+      headers: [
+        {
+          sortable: false,
+          text: "#",
+          value: "movie.id"
+        },
+        {
+          sortable: false,
+          text: "Title",
+          value: "movie.title"
+        }
+      ],
       error: null
     };
   },
@@ -87,21 +106,38 @@ td {
 table {
   width: 100%;
 }
+.id-col {
+  width: 50px;
+}
 .centered-text {
   text-align: center;
 }
-.movie-title {
-  padding-left: 5px;
+.title-col {
+  font-size: 1.2em;
+  text-transform: capitalize;
+}
+.title {
+  text-transform: uppercase;
+  margin: 20px 0;
+}
+.page-num {
+  font-size: 1.1em;
+  margin: 0 10px;
+}
+.center-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+a:visited {
+  color: black;
 }
 button {
-  color: green;
-}
-button:hover {
-  color: white;
-  background-color: green;
-}
-button:disabled {
-  color: grey;
-  background-color: white;
+  margin: 0 5px;
 }
 </style>
