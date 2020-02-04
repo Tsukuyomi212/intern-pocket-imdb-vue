@@ -32,6 +32,7 @@
             <tr>
               <th class="text-left">#</th>
               <th class="text-left">Movie Title</th>
+              <th class="text-left">Genre</th>
             </tr>
           </thead>
           <tbody>
@@ -40,6 +41,7 @@
               <td class="title-col">
                 <router-link :to="{name: 'movie', params: {id: movie.id}}">{{movie.title}}</router-link>
               </td>
+              <td class="title-col centered-text">{{movie.genre.name}}</td>
             </tr>
           </tbody>
         </template>
@@ -80,9 +82,6 @@ export default {
     },
     authenticated() {
       return this.$store.getters["user/isLoggedIn"];
-    },
-    searchResults() {
-      return this.$store.getters["movies/searchResults"];
     }
   },
   created() {
@@ -169,5 +168,8 @@ button {
 }
 #search-bar {
   margin-left: 15px;
+}
+.movie-genre {
+  float: right;
 }
 </style>
