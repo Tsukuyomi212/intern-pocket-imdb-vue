@@ -49,24 +49,27 @@ export default {
       commit('setPagination', pagination);
       commit('setMovies', movies);
     },
-    async fetchInitial({dispatch}) {
+    async fetchInitial({ dispatch }) {
       await dispatch('fetchMovies', undefined);
     },
-    fetchNextPage({dispatch, state}) {
+    fetchNextPage({ dispatch, state }) {
       dispatch('fetchMovies', state.pagination.nextPageUrl);
     },
-    fetchLastPage({dispatch, state}) {
+    fetchLastPage({ dispatch, state }) {
       dispatch('fetchMovies', state.pagination.lastPageUrl);
     },
-    fetchPreviousPage({dispatch, state}) {
+    fetchPreviousPage({ dispatch, state }) {
       dispatch('fetchMovies', state.pagination.previousPageUrl);
     },
-    fetchFirstPage({dispatch, state}) {
+    fetchFirstPage({ dispatch, state }) {
       dispatch('fetchMovies', state.pagination.firstPageUrl);
     },
-    async fetchMovie({commit}, id) {
+    async fetchMovie({ commit }, id) {
       const movie = await movieService.getMovie(id);
       commit('setMovie', movie);
+    },
+    searchMovies({ dispatch }, searchParam) {
+      dispatch('fetchMovies', `/movies?title=${searchParam}`);
     }
   }
 };

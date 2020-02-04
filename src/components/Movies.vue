@@ -1,46 +1,56 @@
 <template>
-  <div class="center-content">
-    <h1 class="centered-text title">Movie Catalogue</h1>
-    <div v-if="error">{{error}}</div>
-    <br />
-    <v-simple-table>
-      <template v-slot:default>
-        <thead>
-          <tr>
-            <th class="text-left">#</th>
-            <th class="text-left">Movie Title</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="movie in movies" :key="movie.id">
-            <td class="id-col centered-text">{{ movie.id }}</td>
-            <td class="title-col">
-              <router-link :to="{name: 'movie', params: {id: movie.id}}">{{movie.title}}</router-link>
-            </td>
-          </tr>
-        </tbody>
-      </template>
-    </v-simple-table>
-    <br />
-    <div class="centered-text">
-      <v-btn @click="fetchFirstPage" :disabled="pagination.currentPage == 1">
-        <i class="fas fa-angle-double-left"></i>
-      </v-btn>
-      <v-btn @click="fetchPreviousPage" :disabled="pagination.currentPage == 1">
-        <i class="fas fa-angle-left"></i>
-      </v-btn>
-      <span class="page-num">{{pagination.currentPage}}</span>
-      <v-btn @click="fetchNextPage" :disabled="pagination.currentPage == pagination.lastPage">
-        <i class="fas fa-angle-right"></i>
-      </v-btn>
-      <v-btn @click="fetchLastPage" :disabled="pagination.currentPage == pagination.lastPage">
-        <i class="fas fa-angle-double-right"></i>
-      </v-btn>
+  <div>
+    <div class="center-content">
+      <v-flex xs6 id="search-bar">
+        <v-text-field
+          @keyup="onChangeHandler"
+          prepend-inner-icon="search"
+          v-model="search"
+          name="search"
+        ></v-text-field>
+      </v-flex>
+      <h1 class="centered-text title">Movie Catalogue</h1>
+      <div v-if="error">{{error}}</div>
+      <div class="centered-text pagination-position">
+        <v-btn @click="fetchFirstPage" :disabled="pagination.currentPage == 1">
+          <i class="fas fa-angle-double-left"></i>
+        </v-btn>
+        <v-btn @click="fetchPreviousPage" :disabled="pagination.currentPage == 1">
+          <i class="fas fa-angle-left"></i>
+        </v-btn>
+        <span class="page-num">{{pagination.currentPage}}</span>
+        <v-btn @click="fetchNextPage" :disabled="pagination.currentPage == pagination.lastPage">
+          <i class="fas fa-angle-right"></i>
+        </v-btn>
+        <v-btn @click="fetchLastPage" :disabled="pagination.currentPage == pagination.lastPage">
+          <i class="fas fa-angle-double-right"></i>
+        </v-btn>
+      </div>
+      <v-simple-table>
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">#</th>
+              <th class="text-left">Movie Title</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="movie in movies" :key="movie.id">
+              <td class="id-col centered-text">{{ movie.id }}</td>
+              <td class="title-col">
+                <router-link :to="{name: 'movie', params: {id: movie.id}}">{{movie.title}}</router-link>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+      <br />
     </div>
   </div>
 </template>
 
 <script>
+import { debounce } from "debounce";
 export default {
   name: "Movies",
   data() {
@@ -57,7 +67,8 @@ export default {
           value: "movie.title"
         }
       ],
-      error: null
+      error: null,
+      search: ""
     };
   },
   computed: {
@@ -69,6 +80,9 @@ export default {
     },
     authenticated() {
       return this.$store.getters["user/isLoggedIn"];
+    },
+    searchResults() {
+      return this.$store.getters["movies/searchResults"];
     }
   },
   created() {
@@ -93,6 +107,13 @@ export default {
     },
     fetchFirstPage() {
       return this.$store.dispatch("movies/fetchFirstPage");
+    },
+    onChangeHandler(event) {
+      const searchParam = event.target.value;
+      return debounce(
+        this.$store.dispatch("movies/searchMovies", searchParam),
+        750
+      );
     }
   }
 };
@@ -103,8 +124,14 @@ th,
 td {
   border: 1px solid black;
 }
+tr,
+td,
+th {
+  height: 40px;
+}
 table {
-  width: 100%;
+  width: 75%;
+  margin: 10%;
 }
 .id-col {
   width: 50px;
@@ -122,13 +149,10 @@ table {
 }
 .page-num {
   font-size: 1.1em;
-  margin: 0 10px;
+  margin: 0 12px;
 }
 .center-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  margin: auto;
 }
 a {
   text-decoration: none;
@@ -139,5 +163,11 @@ a:visited {
 }
 button {
   margin: 0 5px;
+}
+.pagination-position {
+  margin-bottom: 10px;
+}
+#search-bar {
+  margin-left: 15px;
 }
 </style>
