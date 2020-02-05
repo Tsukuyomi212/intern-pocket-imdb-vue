@@ -7,7 +7,8 @@ export default {
     movies: [],
     pagination: {},
     movie: {},
-    genres: []
+    genres: [],
+    newMovie: {}
   },
   getters: {
     movies(state) {
@@ -21,6 +22,9 @@ export default {
     },
     genres(state) {
       return state.genres
+    },
+    newMovie(state) {
+      return state.newMovie;
     }
   },
   mutations: {
@@ -35,6 +39,10 @@ export default {
     },
     setGenres(state, genres) {
       state.genres = genres;
+    },
+    setNewMovie(state, addedMovie) {
+      state.movies = [...state.movies, addedMovie];
+      state.newMovie = addedMovie;
     }
   },
   actions: {
@@ -82,6 +90,10 @@ export default {
     async fetchGenres({ commit }) {
       const genres = await genreService.getGenres();
       commit('setGenres', genres);
+    },
+    async addMovie({ commit }, newMovie) {
+      const addedMovie = await movieService.addMovie(newMovie);
+      commit('setNewMovie', addedMovie);
     }
   }
 };
