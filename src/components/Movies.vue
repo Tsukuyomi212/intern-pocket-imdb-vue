@@ -1,53 +1,66 @@
 <template>
-  <div>
-    <div class="center-content">
-      <v-flex xs6 id="search-bar">
-        <v-text-field
-          @keyup="onChangeHandler"
-          prepend-inner-icon="search"
-          v-model="search"
-          name="search"
-        ></v-text-field>
-      </v-flex>
-      <h1 class="centered-text title">Movie Catalogue</h1>
-      <div v-if="error">{{error}}</div>
-      <div class="centered-text pagination-position">
-        <v-btn @click="fetchFirstPage" :disabled="pagination.currentPage == 1">
-          <i class="fas fa-angle-double-left"></i>
-        </v-btn>
-        <v-btn @click="fetchPreviousPage" :disabled="pagination.currentPage == 1">
-          <i class="fas fa-angle-left"></i>
-        </v-btn>
-        <span class="page-num">{{pagination.currentPage}}</span>
-        <v-btn @click="fetchNextPage" :disabled="pagination.currentPage == pagination.lastPage">
-          <i class="fas fa-angle-right"></i>
-        </v-btn>
-        <v-btn @click="fetchLastPage" :disabled="pagination.currentPage == pagination.lastPage">
-          <i class="fas fa-angle-double-right"></i>
-        </v-btn>
+  <div class="center-content">
+    <v-app>
+      <div>
+        <v-layout row wrap>
+          <v-flex xs4 id="search-bar">
+            <v-text-field
+              @keyup="onChangeHandler"
+              prepend-inner-icon="search"
+              v-model="search"
+              name="search"
+            ></v-text-field>
+          </v-flex>
+          <v-spacer></v-spacer>
+          <v-select
+            v-model="genre"
+            :items="genres"
+            item-value="name"
+            item-text="name"
+            class="select"
+            @change="fetchMovies"
+          ></v-select>
+        </v-layout>
+        <h1 class="centered-text title">Movie Catalogue</h1>
+        <div v-if="error">{{error}}</div>
+        <div class="centered-text pagination-position">
+          <v-btn @click="fetchFirstPage" :disabled="pagination.currentPage == 1">
+            <i class="fas fa-angle-double-left"></i>
+          </v-btn>
+          <v-btn @click="fetchPreviousPage" :disabled="pagination.currentPage == 1">
+            <i class="fas fa-angle-left"></i>
+          </v-btn>
+          <span class="page-num">{{pagination.currentPage}}</span>
+          <v-btn @click="fetchNextPage" :disabled="pagination.currentPage == pagination.lastPage">
+            <i class="fas fa-angle-right"></i>
+          </v-btn>
+          <v-btn @click="fetchLastPage" :disabled="pagination.currentPage == pagination.lastPage">
+            <i class="fas fa-angle-double-right"></i>
+          </v-btn>
+        </div>
+        <v-simple-table>
+          <template v-slot:default>
+            <thead>
+              <tr class="centered-text">
+                <th>#</th>
+                <th>Movie Title</th>
+                <th>Genre</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="movie in movies" :key="movie.id">
+                <td class="id-col centered-text">{{ movie.id }}</td>
+                <td class="title-col centered-text">
+                  <router-link :to="{name: 'movie', params: {id: movie.id}}">{{movie.title}}</router-link>
+                </td>
+                <td class="title-col centered-text">{{movie.genre.name}}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+        <br />
       </div>
-      <v-simple-table>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">#</th>
-              <th class="text-left">Movie Title</th>
-              <th class="text-left">Genre</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="movie in movies" :key="movie.id">
-              <td class="id-col centered-text">{{ movie.id }}</td>
-              <td class="title-col">
-                <router-link :to="{name: 'movie', params: {id: movie.id}}">{{movie.title}}</router-link>
-              </td>
-              <td class="title-col centered-text">{{movie.genre.name}}</td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
-      <br />
-    </div>
+    </v-app>
   </div>
 </template>
 
@@ -57,24 +70,19 @@ export default {
   name: "Movies",
   data() {
     return {
-      headers: [
-        {
-          sortable: false,
-          text: "#",
-          value: "movie.id"
-        },
-        {
-          sortable: false,
-          text: "Title",
-          value: "movie.title"
-        }
-      ],
       error: null,
-      search: ""
+      search: "",
+      genre: ""
     };
   },
   computed: {
     movies() {
+      if (this.genre.length > 0 && this.genre !== "all") {
+        const movies = this.$store.getters["movies/movies"].filter(
+          movie => movie.genre.name === this.genre
+        );
+        return movies;
+      }
       return this.$store.getters["movies/movies"];
     },
     pagination() {
@@ -82,10 +90,15 @@ export default {
     },
     authenticated() {
       return this.$store.getters["user/isLoggedIn"];
+    },
+    genres() {
+      const genres = ["all", ...this.$store.getters["movies/genres"]];
+      return genres;
     }
   },
   created() {
     this.fetchMovies();
+    this.fetchGenres();
   },
   methods: {
     async fetchMovies() {
@@ -113,6 +126,9 @@ export default {
         this.$store.dispatch("movies/searchMovies", searchParam),
         750
       );
+    },
+    fetchGenres() {
+      return this.$store.dispatch("movies/fetchGenres");
     }
   }
 };
@@ -171,5 +187,8 @@ button {
 }
 .movie-genre {
   float: right;
+}
+.select {
+  margin: 10px;
 }
 </style>

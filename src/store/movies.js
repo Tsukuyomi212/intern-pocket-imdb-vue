@@ -1,11 +1,13 @@
 import { movieService } from '../services/movie-service';
+import { genreService } from '../services/genre-service';
 
 export default {
   namespaced: true,
   state: {
     movies: [],
     pagination: {},
-    movie: {}
+    movie: {},
+    genres: []
   },
   getters: {
     movies(state) {
@@ -16,6 +18,9 @@ export default {
     },
     movie(state) {
       return state.movie;
+    },
+    genres(state) {
+      return state.genres
     }
   },
   mutations: {
@@ -27,6 +32,9 @@ export default {
     },
     setMovie(state, movie) {
       state.movie = movie;
+    },
+    setGenres(state, genres) {
+      state.genres = genres;
     }
   },
   actions: {
@@ -70,6 +78,10 @@ export default {
     },
     searchMovies({ dispatch }, searchParam) {
       dispatch('fetchMovies', `/movies?title=${searchParam}`);
+    },
+    async fetchGenres({ commit }) {
+      const genres = await genreService.getGenres();
+      commit('setGenres', genres);
     }
   }
 };
