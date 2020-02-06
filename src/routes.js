@@ -9,7 +9,7 @@ import store from './store/index';
 export default [
   { name: 'register', path: '/register', component: Register },
   { name: 'login', path: '/login', component: Login },
-  { name: 'add-movie', path: '/add', component: AddMovie },
+  { name: 'add-movie', path: '/add-movie', component: AddMovie },
   {
     name: 'movies', path: '/movies', component: Movies, beforeEnter: (to, from, next) => {
       if (!store.getters['user/isLoggedIn']) {
