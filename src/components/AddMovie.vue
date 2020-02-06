@@ -85,8 +85,8 @@ export default {
     async addMovieHandler() {
       try {
         await this.$store.dispatch("movies/addMovie", this.getMovieData());
-        const newMovie = this.$store.getters["movies/newMovie"];
-        this.$router.push("/movies/" + newMovie.id);
+        const newMovie = this.$store.getters["movies/movie"];
+        this.$router.push({ name: "movie", params: { id: newMovie.id } });
       } catch (error) {
         this.error = error.message;
       }
