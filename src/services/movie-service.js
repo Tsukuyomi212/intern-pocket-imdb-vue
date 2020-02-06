@@ -18,7 +18,17 @@ const getMovie = (id) => {
     })
 }
 
+const addMovie = (newMovie) => {
+  return Vue.axios.post('/movies', newMovie)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      throw error;
+    });
+}
 export const movieService = {
   getMovies,
-  getMovie
+  getMovie,
+  addMovie
 };

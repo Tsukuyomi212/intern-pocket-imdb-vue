@@ -3,11 +3,13 @@ import Login from './components/Login';
 import Movies from './components/Movies';
 import Movie from './components/Movie';
 import NotFound from './components/NotFound';
+import AddMovie from './components/AddMovie';
 import store from './store/index';
 
 export default [
   { name: 'register', path: '/register', component: Register },
   { name: 'login', path: '/login', component: Login },
+  { name: 'add-movie', path: '/add', component: AddMovie },
   {
     name: 'movies', path: '/movies', component: Movies, beforeEnter: (to, from, next) => {
       if (!store.getters['user/isLoggedIn']) {

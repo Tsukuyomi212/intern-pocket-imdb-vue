@@ -1,21 +1,28 @@
 import { movieService } from '../services/movie-service';
+import { genreService } from '../services/genre-service';
+import { filterMovies } from '../helpers/filterMovies';
 
 export default {
   namespaced: true,
   state: {
     movies: [],
     pagination: {},
-    movie: {}
+    movie: {},
+    genres: [],
+    newMovie: {}
   },
   getters: {
-    movies(state) {
-      return state.movies;
+    movies: (state) => (genre) => {
+      return genre !== 'all' ? filterMovies(genre, state.movies) : state.movies;
     },
     pagination(state) {
       return state.pagination;
     },
     movie(state) {
       return state.movie;
+    },
+    genres(state) {
+      return state.genres
     }
   },
   mutations: {
@@ -27,6 +34,13 @@ export default {
     },
     setMovie(state, movie) {
       state.movie = movie;
+    },
+    setGenres(state, genres) {
+      state.genres = genres;
+    },
+    setNewMovie(state, addedMovie) {
+      state.movies = [...state.movies, addedMovie];
+      state.movie = addedMovie;
     }
   },
   actions: {
@@ -70,6 +84,14 @@ export default {
     },
     searchMovies({ dispatch }, searchParam) {
       dispatch('fetchMovies', `/movies?title=${searchParam}`);
+    },
+    async fetchGenres({ commit }) {
+      const genres = await genreService.getGenres();
+      commit('setGenres', genres);
+    },
+    async addMovie({ commit }, newMovie) {
+      const addedMovie = await movieService.addMovie(newMovie);
+      commit('setNewMovie', addedMovie);
     }
   }
 };

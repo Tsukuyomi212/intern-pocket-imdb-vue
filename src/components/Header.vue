@@ -3,10 +3,12 @@
     <nav>
       <v-toolbar>
         <v-toolbar-title class="text-uppercase grey--text">
-          <span>
-            <router-link :to="{name: 'movies'}">IMDB</router-link>
-          </span>
+          <v-btn text color="grey" @click="redirectToAddMovie">Add movie</v-btn>
         </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <span>
+          <router-link :to="{name: 'movies'}">IMDB</router-link>
+        </span>
         <v-spacer></v-spacer>
         <v-btn text color="grey" @click="emitLogout" v-if="authenticated">
           <span>Log Out</span>
@@ -28,6 +30,9 @@ export default {
   methods: {
     emitLogout() {
       this.$emit("logout");
+    },
+    redirectToAddMovie() {
+      this.$router.push({ name: "add-movie" });
     }
   }
 };

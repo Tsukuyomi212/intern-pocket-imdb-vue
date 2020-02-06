@@ -3,8 +3,11 @@
     <h1>Page Not Found</h1>
     <div>
       Proceed to
-      <router-link :to="{name: 'login'}">login</router-link> <p>or</p>
-      <p><router-link :to="{name: 'movies'}">IMDB home page</router-link></p>
+      <router-link :to="{name: 'login'}">login</router-link>
+      <p>or</p>
+      <p>
+        <router-link :to="{name: 'movies'}">IMDB home page</router-link>
+      </p>
     </div>
   </div>
 </template>
@@ -16,15 +19,15 @@ export default {
 <style scoped>
 a {
   text-decoration: none;
-  color: black;
+  color: green;
   font-weight: bold;
 }
 a:visited {
-  color: black;
+  color: green;
   font-weight: bold;
 }
 a:hover {
-  color: grey;
+  color: lightgreen;
 }
 .centered-text {
   position: absolute;
