@@ -1,4 +1,7 @@
 import Vue from 'vue';
+import axios from 'axios';
+
+const omdbUrl = 'http://www.omdbapi.com/?apikey=812b968c&s=';
 
 const getMovies = (url = '/movies') => {
   return Vue.axios.get(url)
@@ -27,8 +30,18 @@ const addMovie = (newMovie) => {
       throw error;
     });
 }
+
+const getMoviesFromOMDB = (searchParams) => {
+  return axios.get(omdbUrl + searchParams).then(response => {
+    return response.data;
+  }).catch(error => {
+    throw (error);
+  })
+}
+
 export const movieService = {
   getMovies,
   getMovie,
-  addMovie
+  addMovie,
+  getMoviesFromOMDB
 };
