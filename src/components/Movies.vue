@@ -73,7 +73,7 @@ export default {
     return {
       error: null,
       search: "",
-      genre: ""
+      genre: "all"
     };
   },
   computed: {
