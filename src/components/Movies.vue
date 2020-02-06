@@ -19,6 +19,7 @@
             item-text="name"
             class="select"
             @change="fetchMovies"
+            label="Genre: "
           ></v-select>
         </v-layout>
         <h1 class="centered-text title">Movie Catalogue</h1>
@@ -77,13 +78,7 @@ export default {
   },
   computed: {
     movies() {
-      if (this.genre.length > 0 && this.genre !== "all") {
-        const movies = this.$store.getters["movies/movies"].filter(
-          movie => movie.genre.name === this.genre
-        );
-        return movies;
-      }
-      return this.$store.getters["movies/movies"];
+      return this.$store.getters["movies/movies"](this.genre);
     },
     pagination() {
       return this.$store.getters["movies/pagination"];
@@ -92,8 +87,7 @@ export default {
       return this.$store.getters["user/isLoggedIn"];
     },
     genres() {
-      const genres = ["all", ...this.$store.getters["movies/genres"]];
-      return genres;
+      return ["all", ...this.$store.getters["movies/genres"]];
     }
   },
   created() {

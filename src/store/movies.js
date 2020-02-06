@@ -1,5 +1,6 @@
 import { movieService } from '../services/movie-service';
 import { genreService } from '../services/genre-service';
+import { filterMovies } from '../helpers/filterMovies';
 
 export default {
   namespaced: true,
@@ -11,8 +12,8 @@ export default {
     newMovie: {}
   },
   getters: {
-    movies(state) {
-      return state.movies;
+    movies: (state) => (genre) => {
+      return genre !== 'all' ? filterMovies(genre, state.movies) : state.movies;
     },
     pagination(state) {
       return state.pagination;
@@ -22,9 +23,6 @@ export default {
     },
     genres(state) {
       return state.genres
-    },
-    newMovie(state) {
-      return state.newMovie;
     }
   },
   mutations: {
@@ -42,7 +40,7 @@ export default {
     },
     setNewMovie(state, addedMovie) {
       state.movies = [...state.movies, addedMovie];
-      state.newMovie = addedMovie;
+      state.movie = addedMovie;
     }
   },
   actions: {
