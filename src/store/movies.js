@@ -9,7 +9,7 @@ export default {
     pagination: {},
     movie: {},
     genres: [],
-    newMovie: {}
+    omdbMovies: []
   },
   getters: {
     movies: (state) => (genre) => {
@@ -23,6 +23,9 @@ export default {
     },
     genres(state) {
       return state.genres
+    },
+    omdbMovies(state) {
+      return state.omdbMovies;
     }
   },
   mutations: {
@@ -41,6 +44,9 @@ export default {
     setNewMovie(state, addedMovie) {
       state.movies = [...state.movies, addedMovie];
       state.movie = addedMovie;
+    },
+    setOmdbMovies(state, omdbMovies) {
+      state.omdbMovies = omdbMovies;
     }
   },
   actions: {
@@ -92,6 +98,11 @@ export default {
     async addMovie({ commit }, newMovie) {
       const addedMovie = await movieService.addMovie(newMovie);
       commit('setNewMovie', addedMovie);
+    },
+    async fetchMoviesFromOmdb({ commit }, searchParam) {
+      const result = await movieService.getMoviesFromOMDB(searchParam);
+      const omdbMovies = result.Search;
+      commit('setOmdbMovies', omdbMovies);
     }
   }
 };

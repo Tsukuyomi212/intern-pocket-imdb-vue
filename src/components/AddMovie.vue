@@ -4,16 +4,19 @@
     <v-app>
       <ValidationObserver>
         <v-form @submit.prevent="addMovieHandler">
-          <ValidationProvider rules="required" v-slot="{ errors, valid }">
-            <v-text-field
+          <Validation-provider rules="required" v-slot="{ errors, valid }">
+            <v-combobox
               v-model="title"
               :error-messages="errors"
               :success="valid"
               label="Title"
               required
-              type="text"
-            ></v-text-field>
-          </ValidationProvider>
+              :items="omdbMovies"
+              item-value="Title"
+              item-text="Title"
+              @keydown="getOmdbMovies"
+            ></v-combobox>
+          </Validation-provider>
           <ValidationProvider rules="required" v-slot="{ errors, valid }">
             <v-text-field
               v-model="description"
@@ -26,7 +29,7 @@
           </ValidationProvider>
           <ValidationProvider rules="required" v-slot="{ errors, valid }">
             <v-text-field
-              v-model="image_url"
+              v-model="omdbPoster"
               :error-messages="errors"
               :success="valid"
               label="Image URL"
@@ -58,6 +61,8 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from "vee-validate";
+import { debounce } from "debounce";
+
 export default {
   name: "AddMovie",
   components: {
@@ -76,6 +81,22 @@ export default {
   computed: {
     genres() {
       return this.$store.getters["movies/genres"];
+    },
+    omdbMovies() {
+      return this.$store.getters["movies/omdbMovies"];
+    },
+    omdbTitle() {
+      return this.title.Title;
+    },
+    omdbPoster: {
+      get() {
+        return typeof this.title === "string"
+          ? this.image_url
+          : this.title.Poster;
+      },
+      set(value) {
+        this.image_url = value;
+      }
     }
   },
   created() {
@@ -93,9 +114,9 @@ export default {
     },
     getMovieData() {
       return {
-        title: this.title,
+        title: this.omdbTitle ? this.omdbTitle : this.title,
         description: this.description,
-        image_url: this.image_url,
+        image_url: this.omdbPoster,
         genre_id: this.genre
       };
     },
@@ -104,6 +125,13 @@ export default {
     },
     cancel() {
       this.$router.push({ name: "movies" });
+    },
+    async getOmdbMovies(event) {
+      const searchParam = event.target.value;
+      return await debounce(
+        this.$store.dispatch("movies/fetchMoviesFromOmdb", searchParam),
+        750
+      );
     }
   }
 };
